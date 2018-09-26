@@ -18,9 +18,13 @@ import java.util.List;
 public class LombokPlugin extends PluginAdapter {
 
     private FullyQualifiedJavaType dataAnnotation;
+    private FullyQualifiedJavaType toStringAnnotation;
+    private FullyQualifiedJavaType equalsAndHashCodeAnnotation;
 
     public LombokPlugin() {
         dataAnnotation = new FullyQualifiedJavaType("lombok.Data");
+        toStringAnnotation = new FullyQualifiedJavaType("lombok.ToString");
+        equalsAndHashCodeAnnotation = new FullyQualifiedJavaType("lombok.EqualsAndHashCode");
     }
 
     @Override
@@ -43,6 +47,10 @@ public class LombokPlugin extends PluginAdapter {
     @Override
     public boolean modelRecordWithBLOBsClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         addDataAnnotation(topLevelClass);
+        topLevelClass.addImportedType(toStringAnnotation);
+        topLevelClass.addAnnotation("@ToString(callSuper = true)");
+        topLevelClass.addImportedType(equalsAndHashCodeAnnotation);
+        topLevelClass.addAnnotation("@EqualsAndHashCode(callSuper = true)");
         return true;
     }
 
