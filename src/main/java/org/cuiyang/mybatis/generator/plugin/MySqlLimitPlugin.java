@@ -92,4 +92,35 @@ public class MySqlLimitPlugin extends PluginAdapter {
         element.addElement(ifLimitNotNullElement);
         return true;
     }
+
+    @Override
+    public boolean sqlMapUpdateByExampleSelectiveElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
+        limit(element);
+        return true;
+    }
+
+    @Override
+    public boolean sqlMapUpdateByExampleWithBLOBsElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
+        limit(element);
+        return true;
+    }
+
+    @Override
+    public boolean sqlMapUpdateByExampleWithoutBLOBsElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
+        limit(element);
+        return true;
+    }
+
+    @Override
+    public boolean sqlMapDeleteByExampleElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
+        limit(element);
+        return true;
+    }
+
+    private void limit(XmlElement element) {
+        XmlElement ifLimitNotNullElement = new XmlElement("if");
+        ifLimitNotNullElement.addAttribute(new Attribute("test", "limit != null"));
+        ifLimitNotNullElement.addElement(new TextElement("limit ${limit}"));
+        element.addElement(ifLimitNotNullElement);
+    }
 }
