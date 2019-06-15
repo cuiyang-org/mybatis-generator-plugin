@@ -81,12 +81,12 @@ public class MySqlLimitPlugin extends PluginAdapter {
 
         XmlElement ifOffsetNotNullElement = new XmlElement("if");
         ifOffsetNotNullElement.addAttribute(new Attribute("test", "offset != null"));
-        ifOffsetNotNullElement.addElement(new TextElement("limit ${offset}, ${limit}"));
+        ifOffsetNotNullElement.addElement(new TextElement("limit #{offset}, #{limit}"));
         ifLimitNotNullElement.addElement(ifOffsetNotNullElement);
 
         XmlElement ifOffsetNullElement = new XmlElement("if");
         ifOffsetNullElement.addAttribute(new Attribute("test", "offset == null"));
-        ifOffsetNullElement.addElement(new TextElement("limit ${limit}"));
+        ifOffsetNullElement.addElement(new TextElement("limit #{limit}"));
         ifLimitNotNullElement.addElement(ifOffsetNullElement);
 
         element.addElement(ifLimitNotNullElement);
@@ -120,14 +120,14 @@ public class MySqlLimitPlugin extends PluginAdapter {
     private void updateLimit(XmlElement element) {
         XmlElement ifLimitNotNullElement = new XmlElement("if");
         ifLimitNotNullElement.addAttribute(new Attribute("test", "example.limit != null"));
-        ifLimitNotNullElement.addElement(new TextElement("limit ${example.limit}"));
+        ifLimitNotNullElement.addElement(new TextElement("limit #{example.limit}"));
         element.addElement(ifLimitNotNullElement);
     }
 
     private void deleteLimit(XmlElement element) {
         XmlElement ifLimitNotNullElement = new XmlElement("if");
         ifLimitNotNullElement.addAttribute(new Attribute("test", "limit != null"));
-        ifLimitNotNullElement.addElement(new TextElement("limit ${limit}"));
+        ifLimitNotNullElement.addElement(new TextElement("limit #{limit}"));
         element.addElement(ifLimitNotNullElement);
     }
 }
