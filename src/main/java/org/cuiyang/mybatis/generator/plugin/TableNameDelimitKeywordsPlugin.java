@@ -5,8 +5,8 @@ import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.api.dom.xml.Element;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
-import org.mybatis.generator.internal.db.SqlReservedWords;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,12 +22,16 @@ public class TableNameDelimitKeywordsPlugin extends PluginAdapter {
         return true;
     }
 
+    private List<String> tables() {
+        return Arrays.asList(properties.getProperty("tables", "").split(","));
+    }
+
     /**
      * 表名添加关键字
      */
     private void replaceKeyword(XmlElement element, IntrospectedTable introspectedTable) {
         String tableName = introspectedTable.getFullyQualifiedTable().getIntrospectedTableName();
-        if (context.autoDelimitKeywords() && SqlReservedWords.containsWord(tableName)) {
+        if (context.autoDelimitKeywords() && tables().contains(tableName)) {
             List<Element> elements = element.getElements();
             Iterator<Element> iterator = elements.iterator();
             int index = 0;
@@ -35,10 +39,24 @@ public class TableNameDelimitKeywordsPlugin extends PluginAdapter {
                 Element next = iterator.next();
                 if (next instanceof TextElement) {
                     String content = ((TextElement) next).getContent();
-                    if (content.contains(tableName)) {
+                    if (content.contains("from " + tableName)) {
                         iterator.remove();
-                        TextElement textElement = new TextElement(content.replaceFirst("[^`]" + tableName,
-                                context.getBeginningDelimiter() + tableName + context.getEndingDelimiter()));
+                        TextElement textElement = new TextElement(content.replaceFirst("from " + tableName,
+                                "from " + context.getBeginningDelimiter() + tableName + context.getEndingDelimiter()));
+                        elements.add(index, textElement);
+                        break;
+                    }
+                    if (content.contains("update " + tableName)) {
+                        iterator.remove();
+                        TextElement textElement = new TextElement(content.replaceFirst("update " + tableName,
+                                "update " + context.getBeginningDelimiter() + tableName + context.getEndingDelimiter()));
+                        elements.add(index, textElement);
+                        break;
+                    }
+                    if (content.contains("into " + tableName)) {
+                        iterator.remove();
+                        TextElement textElement = new TextElement(content.replaceFirst("into " + tableName,
+                                "into " + context.getBeginningDelimiter() + tableName + context.getEndingDelimiter()));
                         elements.add(index, textElement);
                         break;
                     }
