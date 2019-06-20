@@ -19,7 +19,6 @@
         <plugin type="org.cuiyang.mybatis.generator.plugin.UnmergeableXmlMappersPlugin"/>
         <plugin type="org.cuiyang.mybatis.generator.plugin.TableNameDelimitKeywordsPlugin"/>
         <plugin type="org.cuiyang.mybatis.generator.plugin.BusinessKeyPlugin"/>
-        <plugin type="org.cuiyang.mybatis.generator.plugin.EnumGeneratorPlugin"/>
 
         <!-- 注释生成器 -->
         <commentGenerator type="org.cuiyang.mybatis.generator.MyCommentGenerator">
