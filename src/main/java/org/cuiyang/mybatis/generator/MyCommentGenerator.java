@@ -24,13 +24,13 @@ public class MyCommentGenerator extends DefaultCommentGenerator {
     /** author */
     private String author = "";
     /** default value */
-    private boolean defaultValue = false;
+    private boolean defaultValue = true;
 
     @Override
     public void addConfigurationProperties(Properties properties) {
         this.properties.putAll(properties);
         this.author = this.properties.getProperty(AUTHOR);
-        this.defaultValue = Boolean.valueOf(this.properties.getProperty(DEFAULT_VALUE));
+        this.defaultValue = Boolean.valueOf(this.properties.getProperty(DEFAULT_VALUE, "true"));
         if (null == author || "".equals(author)) {
             author = System.getProperty("user.name");
         }
