@@ -17,16 +17,20 @@ import java.util.Properties;
 public class MyCommentGenerator extends DefaultCommentGenerator {
 
     private static final String AUTHOR = "author";
+    private static final String DEFAULT_VALUE = "defaultValue";
 
     /** properties */
     private Properties properties = new Properties();
     /** author */
     private String author = "";
+    /** default value */
+    private boolean defaultValue = false;
 
     @Override
     public void addConfigurationProperties(Properties properties) {
         this.properties.putAll(properties);
         this.author = this.properties.getProperty(AUTHOR);
+        this.defaultValue = Boolean.valueOf(this.properties.getProperty(DEFAULT_VALUE));
         if (null == author || "".equals(author)) {
             author = System.getProperty("user.name");
         }
@@ -35,7 +39,14 @@ public class MyCommentGenerator extends DefaultCommentGenerator {
 
     @Override
     public void addFieldComment(Field field, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
-        field.addJavaDocLine("/** " + introspectedColumn.getRemarks() + " */");
+        String defaultValue = introspectedColumn.getDefaultValue();
+        StringBuilder sb = new StringBuilder();
+        sb.append("/** ").append(introspectedColumn.getRemarks());
+        if (this.defaultValue && defaultValue != null && !defaultValue.isEmpty()) {
+            sb.append(" [").append(defaultValue).append("]");
+        }
+        sb.append(" */");
+        field.addJavaDocLine(sb.toString());
     }
 
     @Override
