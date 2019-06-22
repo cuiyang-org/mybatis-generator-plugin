@@ -42,17 +42,20 @@ public class BusinessKeyPlugin extends PluginAdapter {
                 elements.remove(elements.size() - 1);
                 elements.add(new TextElement(String.format("where %s = #{%s,jdbcType=%s}", columnName, property, jdbcTypeName)));
 
-                int index = 0;
-                List<Attribute> attributes = element.getAttributes();
-                Iterator<Attribute> iterator = attributes.iterator();
-                while (iterator.hasNext()) {
-                    Attribute attr = iterator.next();
-                    if ("parameterType".equals(attr.getName())) {
-                        iterator.remove();
-                        attributes.add(index, new Attribute("parameterType", column.getFullyQualifiedJavaType().getFullyQualifiedName()));
-                        break;
+                // update语句不替换parameterType
+                if (!element.getName().contains("update")) {
+                    int index = 0;
+                    List<Attribute> attributes = element.getAttributes();
+                    Iterator<Attribute> iterator = attributes.iterator();
+                    while (iterator.hasNext()) {
+                        Attribute attr = iterator.next();
+                        if ("parameterType".equals(attr.getName())) {
+                            iterator.remove();
+                            attributes.add(index, new Attribute("parameterType", column.getFullyQualifiedJavaType().getFullyQualifiedName()));
+                            break;
+                        }
+                        index++;
                     }
-                    index++;
                 }
                 break;
             }
@@ -60,6 +63,10 @@ public class BusinessKeyPlugin extends PluginAdapter {
     }
 
     private void handleClient(Method method, IntrospectedTable introspectedTable) {
+        if (method.getName().contains("update")) {
+            // update语句不替换参数
+            return;
+        }
         for (IntrospectedColumn column : introspectedTable.getAllColumns()) {
             boolean bizKey = column.getRemarks().contains(businessKeyRemark());
             if (bizKey) {

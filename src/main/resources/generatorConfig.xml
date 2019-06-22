@@ -7,11 +7,11 @@
     <!-- Document: http://www.mybatis.org/generator/index.html -->
     <context id="mysql" targetRuntime="MyBatis3">
         <property name="basePackageName" value="org.cuiyang"/>
-
         <property name="autoDelimitKeywords" value="true"/>
         <property name="beginningDelimiter" value="`"/>
         <property name="endingDelimiter" value="`"/>
         <property name="javaFileEncoding" value="UTF-8"/>
+        <property name="author" value="cuiyang"/>
 
         <!-- 插件 -->
         <plugin type="org.cuiyang.mybatis.generator.plugin.MySqlLimitPlugin"/>
@@ -19,11 +19,14 @@
         <plugin type="org.cuiyang.mybatis.generator.plugin.UnmergeableXmlMappersPlugin"/>
         <plugin type="org.cuiyang.mybatis.generator.plugin.TableNameDelimitKeywordsPlugin"/>
         <plugin type="org.cuiyang.mybatis.generator.plugin.BusinessKeyPlugin"/>
+        <plugin type="org.cuiyang.mybatis.generator.plugin.EnumGeneratorPlugin">
+            <property name="targetProject" value="src/main/java"/>
+            <property name="targetPackage" value="dal.constant"/>
+        </plugin>
 
         <!-- 注释生成器 -->
         <commentGenerator type="org.cuiyang.mybatis.generator.MyCommentGenerator">
             <property name="author" value="cuiyang"/>
-            <property name="defaultValue" value="true"/>
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
 

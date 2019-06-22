@@ -39,26 +39,15 @@ public class TableNameDelimitKeywordsPlugin extends PluginAdapter {
                 Element next = iterator.next();
                 if (next instanceof TextElement) {
                     String content = ((TextElement) next).getContent();
-                    if (content.contains("from " + tableName)) {
-                        iterator.remove();
-                        TextElement textElement = new TextElement(content.replaceFirst("from " + tableName,
-                                "from " + context.getBeginningDelimiter() + tableName + context.getEndingDelimiter()));
-                        elements.add(index, textElement);
-                        break;
-                    }
-                    if (content.contains("update " + tableName)) {
-                        iterator.remove();
-                        TextElement textElement = new TextElement(content.replaceFirst("update " + tableName,
-                                "update " + context.getBeginningDelimiter() + tableName + context.getEndingDelimiter()));
-                        elements.add(index, textElement);
-                        break;
-                    }
-                    if (content.contains("into " + tableName)) {
-                        iterator.remove();
-                        TextElement textElement = new TextElement(content.replaceFirst("into " + tableName,
-                                "into " + context.getBeginningDelimiter() + tableName + context.getEndingDelimiter()));
-                        elements.add(index, textElement);
-                        break;
+                    String[] arr = {"from ", "update ", "into "};
+                    for (String str : arr) {
+                        if (content.contains(str + tableName)) {
+                            iterator.remove();
+                            TextElement textElement = new TextElement(content.replaceFirst(str + tableName,
+                                    str + context.getBeginningDelimiter() + tableName + context.getEndingDelimiter()));
+                            elements.add(index, textElement);
+                            return;
+                        }
                     }
                 }
                 index++;
