@@ -25,15 +25,11 @@ public enum ${className} {
     }
 
     public static ${className} codeOf(${codeType} code) {
-        return codeOf(code, null);
-    }
-
-    public static ${className} codeOf(${codeType} code, ${className} defaultValue) {
         for (${className} e : ${className}.values()) {
             if (Objects.equals(e.getCode(), code)) {
                 return e;
             }
         }
-        return defaultValue;
+        return null;
     }
 }
