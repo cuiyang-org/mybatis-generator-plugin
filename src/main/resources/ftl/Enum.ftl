@@ -10,18 +10,25 @@ import java.util.Objects;
 public enum ${className} {
     <#list items as item>
     /** ${item.remark} */
-    ${item.name}(${item.code})<#if item_has_next>,<#else>;</#if>
+    ${item.name}(${item.code}, "${item.remark}")<#if item_has_next>,<#else>;</#if>
     </#list>
 
     /** code */
     private ${codeType} code;
+    /** text */
+    private String text;
 
-    ${className}(${codeType} code) {
+    ${className}(${codeType} code, String text) {
         this.code = code;
+        this.text = text;
     }
 
     public ${codeType} getCode() {
         return this.code;
+    }
+
+    public String getText() {
+        return this.text;
     }
 
     public static ${className} codeOf(${codeType} code) {
