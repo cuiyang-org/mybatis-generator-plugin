@@ -1,5 +1,6 @@
 package org.cuiyang.mybatis.generator;
 
+import org.cuiyang.mybatis.generator.util.WordUtils;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl;
@@ -25,7 +26,7 @@ public class MyJavaTypeResolver extends JavaTypeResolverDefaultImpl {
     protected FullyQualifiedJavaType overrideDefaultType(IntrospectedColumn column, FullyQualifiedJavaType defaultType) {
         // 解析boolean类型
         if (column.getJdbcType() == Types.TINYINT && column.getActualColumnName().startsWith(BOOLEAN_TYPE_PREFIX)) {
-            column.setJavaProperty(column.getActualColumnName().substring(3));
+            column.setJavaProperty(WordUtils.lowerCamelCase(column.getActualColumnName().substring(3)));
             return new FullyQualifiedJavaType(Boolean.class.getName());
         }
         return super.overrideDefaultType(column, defaultType);
