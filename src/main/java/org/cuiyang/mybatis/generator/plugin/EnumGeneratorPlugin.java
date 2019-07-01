@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.cuiyang.mybatis.generator.util.WordUtils.toCamelCase;
-
 /**
  * 枚举自动生成插件
  * <p> eg. 喜欢(cancel 0 取消, like 1 喜欢, dislike 2 不喜欢)
